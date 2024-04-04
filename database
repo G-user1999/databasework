@@ -1,0 +1,69 @@
+create database Banco_do_RS2;
+
+create table Conta_corrente(
+ID int,
+saldo_atual int,
+User_name varchar(50),
+Pix_ID int,
+CPF varchar(50)
+);
+
+create table Conta_Poupanca(
+ID int,
+saldo int,
+User_name varchar(50),
+Pix_ID int,
+CPF varchar(50)
+);
+
+create table Credit_card(
+ID int,
+fatura_atual int,
+Owner_ID int
+);
+
+insert into  Conta_corrente values (1234,1000,'namename',6789,4444);
+insert into Conta_Poupanca values (1235,500,'namename',6780,4444);
+select * from Conta_corrente;
+DELIMITER //
+create procedure saque(saldo_atual int, saldo int)
+begin
+declare saque int
+update Conta_corrente, Conta_Poupanca
+set saldo_atual = saldo_atual - saque, saldo = saldo - saque
+end;
+//
+DELIMITER ;
+DELIMITER //
+create procedure deposit(saldo int)
+begin
+update Conta_Poupanca
+set saldo = new.saldo
+where saldo = new.saldo
+end;
+//
+DELIMITER ;
+create table Movement(
+Movement_ID int,
+Account_ID int,
+saldo_Atual int,
+saldo_Anterior int
+);
+DELIMITER //
+create trigger UpdateMovement
+after update on Conta_corrente
+for each row
+begin
+update Movement
+set saldo_Atual = Conta_corrente(saldo_atual)
+where saldo_Atual = new.saldo_Atual;
+end;
+//
+DELIMITER ;
+create function IDlisting(ID int)
+returns int
+begin
+select ID from Conta_corrente
+where saldo_atual > 1000
+order by User_name desc
+end;
